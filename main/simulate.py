@@ -31,7 +31,7 @@ class Stack:
                     pass
                 i += 1
             iteration += 1
-        self.send()
+        #self.send()
 
     def send(self): #call choose() for all nodes, that supposed to send message
         global iteration
@@ -43,11 +43,16 @@ class Stack:
                 pass
             i += 1
             iteration += 1
+        if self.arr.count(1) != 0: #exit condition
+            self.send()
+        else:
+            return
 
 
 def epidemic(nodes, best, amount_of_recipients):
     x = Stack(nodes, best, amount_of_recipients)
     x.choose(x.arr[random.randrange(0, nodes, 1)], amount_of_recipients, best)#change random node to 2 and choose it recipients
+    x.send()
     count = 0
     for a in x.arr: #count nodes, that recieved packets
         if a == 2:
