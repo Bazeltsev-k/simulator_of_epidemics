@@ -4,21 +4,6 @@ import random
 import time
 
 
-def epidemic(nodes, best):
-    x = Stack(nodes, best)
-    x.change(x.arr[random.randrange(0, nodes, 1)].choose(4, best)) #change random node to 2 and choose it recipients
-    count = 0
-    for a in x.arr: #count nodes, that recieved packets
-        if a.n == 2:
-            count += 1
-        else:
-            pass
-    if count == nodes: #if all nodes recieved messages - return 1, else - 0
-        return 1
-    else:
-        return 0
-
-
 iteration = 0
 
 
@@ -29,7 +14,7 @@ class Node(object):
         self.index = ind
         self.nodes = nodes
 
-    def choose(self, x, best): #change node value to 2 (it sends a message) and choose recipients
+    def choose(self, x, best): #change node value, that supposed to send message to 2 and choose recipients
         global iteration
         self.n = 2
         chooses = []
@@ -46,28 +31,56 @@ class Node(object):
 
 
 class Stack:
-    def __init__(self, nodes, best):
+    def __init__(self, nodes, best, x):
+        self.nodes = nodes
         self.best = best
-        self.arr = [Node(i, nodes) for i in range(0, nodes)]
+        self.arr = [0 for i in range(0, nodes)]
+        self.x = x
 
-    def change(self, choosed): #change nodes, that suppose to recieve packets to 1
+    def choose(self, index, x, best): #change node value, that supposed to send message to 2 and choose recipients
         global iteration
-        for ch in choosed:
-            if self.arr[ch].n == 0:
-                self.arr[ch].n = 1
-            else:
+        chooses = []
+        i = 0
+        self.arr[index] = 2
+        while i < x:
+            rand = random.randrange(0, self.nodes, 1)
+            if (rand in chooses and best) or rand == index:
                 pass
+            else:
+                chooses.append(rand)
+                if self.arr[rand] == 0:
+                    self.arr[rand] = 1
+                else:
+                    pass
+                i += 1
             iteration += 1
         self.send()
 
-    def send(self): #change nodes, that supposed to send message to 2 and choose their recipients
+    def send(self): #call choose() for all nodes, that supposed to send message
         global iteration
+        i = 0
         for a in self.arr:
-            if a.n == 1:
-                self.change(a.choose(4, self.best))
+            if a == 1:
+                self.choose(i, self.x, self.best)
             else:
                 pass
+            i += 1
             iteration += 1
+
+
+def epidemic(nodes, best, amount_of_recipients):
+    x = Stack(nodes, best, amount_of_recipients)
+    x.choose(x.arr[random.randrange(0, nodes, 1)], amount_of_recipients, best)#change random node to 2 and choose it recipients
+    count = 0
+    for a in x.arr: #count nodes, that recieved packets
+        if a == 2:
+            count += 1
+        else:
+            pass
+    if count == nodes: #if all nodes recieved messages - return 1, else - 0
+        return 1
+    else:
+        return 0
 
 
 def main(argv):
@@ -76,6 +89,7 @@ def main(argv):
     start_time = time.time()
     nodes = 0
     times = 0
+    x = 4
     your_algorithm = False
     try:
         opts, args = getopt.getopt(argv, "hn:i:", ["your-algorithm", "help"])
@@ -94,7 +108,7 @@ def main(argv):
             your_algorithm = True #use better algorithm or not
     summ = 0
     for i in range(0, int(times)):
-        summ += epidemic(nodes, your_algorithm)
+        summ += epidemic(nodes, your_algorithm, x)
         if i == 0:
             print("Algorithm takes", iteration, "iterations to finish 1 time")
     percent = (summ / int(times)) * 100
