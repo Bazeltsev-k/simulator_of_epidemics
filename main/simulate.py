@@ -7,29 +7,6 @@ import time
 iteration = 0
 
 
-class Node(object):
-    n = 0
-
-    def __init__(self, ind, nodes):
-        self.index = ind
-        self.nodes = nodes
-
-    def choose(self, x, best): #change node value, that supposed to send message to 2 and choose recipients
-        global iteration
-        self.n = 2
-        chooses = []
-        i = 0
-        while i < x:
-            rand = random.randrange(0, self.nodes, 1)
-            if (rand in chooses and best) or rand == self.index:
-                pass
-            else:
-                chooses.append(rand)
-                i += 1
-            iteration += 1
-        return chooses
-
-
 class Stack:
     def __init__(self, nodes, best, x):
         self.nodes = nodes
