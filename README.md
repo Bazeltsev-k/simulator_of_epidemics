@@ -6,7 +6,7 @@ Simulator of epidemics (gossip protocol simulator).
 
 Result:
 
-![alt_text](https://github.com/Krissper/simulator_of_epidemics/blob/master/readme_images/results.JPG)
+![alt_text](https://github.com/Krissper/simulator_of_epidemics/blob/master/readme_images/result.JPG)
 
 
 Как я понял, необходимо написать симулятор проткола, результатом которого будет процент случаев, в которых все узлы получили пакет.
