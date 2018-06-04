@@ -31,7 +31,6 @@ class Stack:
                     pass
                 i += 1
             iteration += 1
-        #self.send()
 
     def send(self): #call choose() for all nodes, that supposed to send message
         global iteration
